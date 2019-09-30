@@ -1,13 +1,12 @@
 module.exports = {
   host: '127.0.0.1',
-  username: 'docker',
-  password: 'docker',
-  database: 'nodeauth',
+  username: 'root',
+  password: '',
+  database: 'root-db1',
   dialect: 'mysql',
-  operatorsAliases: false,
   logging: true,
   define: {
-    timestamps: true,
+    timestamps: false,
     underscored: true,
     underscoredAll: true,
   }
