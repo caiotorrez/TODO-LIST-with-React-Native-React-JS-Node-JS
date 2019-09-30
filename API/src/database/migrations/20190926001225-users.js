@@ -22,15 +22,20 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      created_at: {
-        type: Sequelize.DATE,
-        allowNull: false
+
+      // Timestamps
+    created_at: {
+        type: Sequelize.DATE(3),
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP(3)'),
       },
-      update_at: {
-        type: Sequelize.DATE,
-        allowNull: false
-      }
-    })
+    updated_at: {
+        type: Sequelize.DATE(3),
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3)'),
+      },
+    },
+    {
+      engine: 'InnoDB',
+    });
   },
 
   down: (queryInterface, Sequelize) => {
