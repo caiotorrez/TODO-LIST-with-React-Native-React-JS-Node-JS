@@ -4,7 +4,7 @@ module.exports = {
   password: '',
   database: 'root-db1',
   dialect: 'mysql',
-  logging: true,
+  logging: console.log,
   define: {
     timestamps: false,
     underscored: true,
