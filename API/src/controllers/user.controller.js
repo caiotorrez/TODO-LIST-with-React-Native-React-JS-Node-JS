@@ -1,5 +1,4 @@
 const { User } = require('../models');
-const bcrypt = require('bcrypt');
 
 class UserController {
     async create(req, res) {
@@ -18,24 +17,19 @@ class UserController {
             return res.status(409).json({ message: 'E-mail already registered' });
         }
 
-        const saveUserInDB = (err, password_hash) => {
-            User.create({ name, email, password_hash }).then(
-                (user) => {
-                    res.status(201).json(user.id);
-                },
-                (err) => {
-                    console.error(err)
-                    return res.status(500).json('Unexpected error');
-                }
-            );
-        }
-
-        bcrypt.hash(password, 8, saveUserInDB);
-
+        await User.create({ name, email, password }).then(
+            (user) => {
+                res.status(201).json(user.id);
+            },
+            (err) => {
+                console.error(err)
+                return res.status(500).json('Unexpected error');
+            }
+        );
     }
 
     async findOneByEmail(req, res) {
-        const { email } = req.body;
+        const { email } = req.params;
 
         if (!email) {
             return res.status(401).json({ message: 'E-mail invalid' });
@@ -47,7 +41,17 @@ class UserController {
         }
 
         return res.status(200).json(userDB)
+    }
 
+    async findAll(req, res) {
+        const defaultQuerys = { limit: 10, offset: 0, group: 'name', order: 'DESC' };
+        const pageable = { limit: Number(req.query.limit) || defaultQuerys.limit, offset: Number(req.query.offset) || defaultQuerys.offset }
+        const queryOrder = { order: [[req.query.group || defaultQuerys.group, req.query.order || defaultQuerys.order]] }
+        const validQuerys = Object.assign(pageable, queryOrder);
+
+        const allUsersDB = await User.findAll(validQuerys);
+
+        return res.status(200).json(allUsersDB)
     }
 }
 
