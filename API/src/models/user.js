@@ -6,7 +6,16 @@ module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define("User", {
         name: DataTypes.STRING,
         email: DataTypes.STRING,
+        password: DataTypes.VIRTUAL,
         password_hash: DataTypes.STRING
+    }, {
+        hooks: {
+            beforeSave: async (user) => {
+                if (user.password) {
+                    user.password_hash = await bcrypt.hash(user.password, 8);
+                }
+            }
+        }
     });
 
     User.prototype.checkPassword = function (password) {
@@ -14,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     User.prototype.generateToken = function () {
-        return jwt.sign({ id: this.id }, 'secret_key')
+        return jwt.sign({ id: this.id }, 'secret_key', { expiresIn: 100000000 });
     }
 
     User.prototype.toJSON = function () {
