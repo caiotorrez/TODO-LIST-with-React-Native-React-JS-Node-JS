@@ -17,5 +17,7 @@ routes.get('/users/', UserController.findAll);
 routes.get('/task/:id', TaskController.findOne);
 routes.get('/task/', TaskController.findAll);
 routes.post('/task/', TaskController.create);
+routes.put('/task/:id', TaskController.edit);
+routes.delete('/task/:id', TaskController.delete);
 
 module.exports = routes;
