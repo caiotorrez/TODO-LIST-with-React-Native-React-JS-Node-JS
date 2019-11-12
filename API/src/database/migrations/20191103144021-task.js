@@ -41,12 +41,12 @@ module.exports = {
       },
       // Timestamps
       created_at: {
-        type: Sequelize.DATE(3),
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP(3)'),
+        type: Sequelize.DATE,
+        allowNull: false        
       },
       updated_at: {
-        type: Sequelize.DATE(3),
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3)'),
+        type: Sequelize.DATE,
+        allowNull: false        
       },
     });
   },
