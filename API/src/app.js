@@ -1,4 +1,10 @@
+require('dotenv').config({
+    path: process.env.NODE_ENV && process.env.NODE_ENV === 'test' ? '.env.test' : '.env'
+});
+console.log('process.env.NODE_ENV ===>', process.env.NODE_ENV)
+
 const express = require('express');
+const cors = require('cors');
 
 class AppController {
     constructor() {
@@ -9,6 +15,7 @@ class AppController {
 
     middlewares() {
         this.express.use(express.json());
+        // this.express.use(cors);
     }
 
     routes() {
