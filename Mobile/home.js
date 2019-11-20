@@ -1,9 +1,8 @@
-// Example.js
 import React, { useEffect } from 'react';
-import { View, Text, ImageBackground, ScrollView, TextInput, TouchableOpacity, KeyboardAvoidingView, SafeAreaView } from 'react-native';
+import { View, Text, ImageBackground, ScrollView, TouchableOpacity, KeyboardAvoidingView, ActivityIndicator, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadTasks } from './services/redux/action/task.action';
+import { loadTasks, refreshTasks } from './services/redux/action/task.action';
 import TaskThumbnail from './components/taskThumbnail';
 
 var weekday = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
@@ -15,7 +14,20 @@ var month = yearMonth[date.getMonth()];
 const Home = React.memo(({ navigation }) => {
 
   const dispatch = useDispatch();
-  var { tasks, loading } = useSelector(state => state.reducer);
+  const { tasks, loading, refreshLoading } = useSelector(state => state.reducer);
+
+  const loadMore = () => {
+    params = [`offset=${tasks.length}`, `limit=${tasks.length + 10}`]
+    loadTasks(dispatch, params);
+  }
+
+  const loadMoreLoading = () => {
+    return (
+      <View>
+        <ActivityIndicator style={{paddingVertical: 15}}></ActivityIndicator>
+      </View>
+    )
+  }
 
   useEffect(() => {
     if (!loading) {
@@ -26,7 +38,6 @@ const Home = React.memo(({ navigation }) => {
   return (
 
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: 'white', }} behavior="padding" enabled keyboardVerticalOffset={0}>
-
       <View style={{ flex: 1 }}>
         <ImageBackground source={{ uri: 'https://bit.ly/2VMafKZ' }}
           style={{ flex: 1 }}
@@ -39,16 +50,19 @@ const Home = React.memo(({ navigation }) => {
       </View>
 
       <View style={{ flex: 2, justifyContent: 'space-between' }}>
-        <SafeAreaView>
-          <ScrollView style={{ marginTop: 10 }}>
+          <ScrollView alwaysBounceVertical={true} contentContainerStyle={{flex: 1}} style={{flex: 1, marginTop: 10, marginBottom: 50 }}>
             {tasks.length ?
-              <View>
-                {tasks.map((task, index) => {
-                  return (
-                    <TaskThumbnail key={index} navigation={navigation} task={task}></TaskThumbnail>
-                  )
-                })}
-              </View>
+              <FlatList
+                style={{flex: 1}}
+                data={tasks}
+                keyExtractor={(item) => String(item.id)}
+                renderItem={({ item }) => (<TaskThumbnail navigation={navigation} task={item}></TaskThumbnail>)}
+                onEndReached={() => loadMore()}
+                onEndReachedThreshold={0}
+                ListFooterComponent={() => loadMoreLoading()}
+                refreshing={refreshLoading}
+                onRefresh={() => refreshTasks(dispatch)}
+              />
               : <View>
                 {loading ? <Text style={{ fontSize: 18, textAlign: 'center' }}>Carregando...</Text> :
                   <Text style={{ fontSize: 18, textAlign: 'center' }}>Sua lista está vazia. Adicione uma tarefa pendente.</Text>}
@@ -56,7 +70,6 @@ const Home = React.memo(({ navigation }) => {
 
             }
           </ScrollView>
-        </SafeAreaView>
 
         <View style={{ height: 50, position: 'absolute', bottom: 0, backgroundColor: '#fff', width: '100%' }}>
           <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 10, borderTopWidth: 1, borderTopColor: '#dedede' }}
