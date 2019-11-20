@@ -12,13 +12,18 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         borderBottomWidth: 1,
         borderColor: '#dedede'
+    },
+    touched: {
+        position: 'absolute',
+        left: 0,
+        paddingHorizontal: 20
     }
 });
 
 const taskThumbnail = React.memo(({ task, navigation }) => {
+    const { title, completed } = task;
     const dispatch = useDispatch();
     const { loading } = useSelector(state => state.reducer);
-
     const toggleCompleted = (task) => {
         if (!loading) {
             task.completed = !task.completed;
@@ -26,12 +31,10 @@ const taskThumbnail = React.memo(({ task, navigation }) => {
         }
     }
 
-    const { title, completed } = task;
-
     return (
         <TouchableOpacity onPress={() => navigation.navigate('Profile', { task: task })} style={styles.container}>
             <Text style={{ marginLeft: 40 }}>{title}</Text>
-            <TouchableOpacity style={{ position: 'absolute', left: 0, paddingHorizontal: 20 }} onPress={() => toggleCompleted(task)}>
+            <TouchableOpacity style={styles.touched} onPress={() => toggleCompleted(task)}>
                 <Ionicons name={completed ? 'ios-checkmark-circle' : 'ios-radio-button-off'} size={32} color="#525bff" />
             </TouchableOpacity>
         </TouchableOpacity>
