@@ -3,10 +3,10 @@ import { Animated, Easing, Text, TouchableOpacity } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { Provider } from 'react-redux';
-import store from './services/redux/redux.root';
-import Home from './home';
-import Task from './task';
-import NewTask from './screens/newTasks';
+import store from './src/services/redux/redux.root';
+import Home from './src/screens/home';
+import NewTask from './src/screens/newTask';
+import DetailTask from './src/screens/detailTask';
 
 const MainNavigator = createStackNavigator({
   Home: {
@@ -20,10 +20,12 @@ const MainNavigator = createStackNavigator({
       },
     })
   },
-  Profile: {
-    screen: Task,
+  DetailTask: {
+    screen: DetailTask,
     navigationOptions: ({ navigation }) => ({
-      headerStyle: { elevation: 0 },
+      header: null,
+      headerLeft: null,
+      headerRight: null,
     })
   },
   NewTask: {

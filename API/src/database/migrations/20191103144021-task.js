@@ -15,6 +15,7 @@ module.exports = {
       },
       start: {
         type: Sequelize.DATE,
+        defaultValue: new Date(new Date().setHours(8,0,0,0)),
         allowNull: false,
       },
       end: {
@@ -22,7 +23,6 @@ module.exports = {
       },
       description: {
         type: Sequelize.TEXT,
-        allowNull: false,
       },
       completed: {
         type: Sequelize.BOOLEAN,

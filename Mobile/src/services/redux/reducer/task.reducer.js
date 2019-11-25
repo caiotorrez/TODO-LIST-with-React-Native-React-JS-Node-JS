@@ -1,6 +1,7 @@
 const initialState = {
     tasks: [],
     newTasks: [],
+    limitExceeded: false,
     error: null,
     loading: false,
     refreshLoading: false
@@ -9,17 +10,22 @@ const initialState = {
 export function reducer(state = initialState, { type, payload }) {
 
     switch (type) {
-
         case 'LOADING_TASK':
             return {
                 ...state,
                 loading: true
             }
         case 'LOADING_REFRESH_TASK':
-                return {
-                    ...state,
-                    refreshLoading: true
-                }
+            return {
+                ...state,
+                refreshLoading: true,
+            }
+        case 'LIMIT_EXCEEDED':
+            return {
+                ...state,
+                loading: false,
+                limitExceeded: true
+            }
         case 'FIND_ALL_TASKS':
             return {
                 ...state,
@@ -30,12 +36,12 @@ export function reducer(state = initialState, { type, payload }) {
             return {
                 ...state,
                 tasks: [...payload],
-                refreshLoading: false
+                refreshLoading: false,
+                limitExceeded: false
             }
         case 'ADD_TASK':
             return {
                 ...state,
-                tasks: [...state.tasks, payload],
                 newTasks: [...state.newTasks, payload],
                 loading: false
             }
@@ -53,7 +59,8 @@ export function reducer(state = initialState, { type, payload }) {
         case 'ERROR_TASK': {
             return {
                 ...state,
-                loading: false
+                loading: false,
+                refreshLoading: false
             }
         }
         default:

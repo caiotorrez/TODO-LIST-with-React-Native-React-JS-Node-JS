@@ -45,13 +45,13 @@ class UserController {
 
     async findAll(req, res) {
         const defaultQuerys = { limit: 10, offset: 0, group: 'name', order: 'DESC' };
-        const pageable = { limit: Number(req.query.limit) || defaultQuerys.limit, offset: Number(req.query.offset) || defaultQuerys.offset }
-        const queryOrder = { order: [[req.query.group || defaultQuerys.group, req.query.order || defaultQuerys.order]] }
+        const pageable = { limit: Number(req.query.limit) || defaultQuerys.limit, offset: Number(req.query.offset) || defaultQuerys.offset };
+        const queryOrder = { order: [[req.query.group || defaultQuerys.group, req.query.order || defaultQuerys.order]] };
         const validQuerys = Object.assign(pageable, queryOrder);
 
         const allUsersDB = await User.findAll(validQuerys);
 
-        return res.status(200).json(allUsersDB)
+        return res.status(200).json(allUsersDB);
     }
 }
 

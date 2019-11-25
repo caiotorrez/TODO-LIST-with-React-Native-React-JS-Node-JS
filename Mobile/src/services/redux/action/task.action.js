@@ -3,12 +3,18 @@ import conection from '../../conection';
 import constants from '../../constants';
 
 export const loadTasks = async (dispatch, params = []) => {
-    // await AsyncStorage.setItem('@jwt', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTc0MDc3NzIyLCJleHAiOjE2NzQwNzc3MjJ9.Yu5XV7Rv1yrzC2rodZoNfQiVMTyCgxIqg95kq9TZq88');
+    await AsyncStorage.setItem('@jwt', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTc0MDc3NzIyLCJleHAiOjE2NzQwNzc3MjJ9.Yu5XV7Rv1yrzC2rodZoNfQiVMTyCgxIqg95kq9TZq88');
     params = [...params, 'startDate=2019-11-04']
     dispatch({ type: "LOADING_TASK" });
     await conection.get('task', params).then(
         (data) => {
-            dispatch({ type: constants.actions.task.findAll, payload: data });
+            console.log('data -> ', data.length)
+            if (!data.length) {
+                dispatch({ type: "LIMIT_EXCEEDED" });
+            }
+            else {
+                dispatch({ type: constants.actions.task.findAll, payload: data });
+            }
         },
         (error) => {
             console.error(error);

@@ -2,10 +2,11 @@
 module.exports = (sequelize, DataTypes) => {
     const Task = sequelize.define("Task", {
         title: DataTypes.STRING,
+        completed: DataTypes.BOOLEAN,
+        active: DataTypes.BOOLEAN,
         start: DataTypes.DATE,
         end: DataTypes.DATE,
         description: DataTypes.TEXT,
-        completed: DataTypes.BOOLEAN,
         release: DataTypes.BOOLEAN
     });
 

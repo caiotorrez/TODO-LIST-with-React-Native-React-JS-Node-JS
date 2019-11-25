@@ -34,10 +34,16 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 20,
         top: 8
+    },
+    textInput: {
+        flex: 1,
+        padding: 10,
+        height: 20,
+        marginLeft: 50
     }
 });
 
-const newTasks = ({ navigation }) => {
+export const NewTask = ({ navigation }) => {
     const dispatch = useDispatch();
     const { newTasks, loading } = useSelector(state => state.reducer);
     const [task, setTask] = useState(new Task());
@@ -50,7 +56,6 @@ const newTasks = ({ navigation }) => {
         }
         setTask(new Task());
     }
-
 
     useEffect(() => {
         setTimeout(() => {
@@ -80,7 +85,7 @@ const newTasks = ({ navigation }) => {
                         placeholder="Adicionar nova tarefa"
                         onSubmitEditing={() => createTask()}
                         onChangeText={(text) => setTask({ title: text })}
-                        style={{ flex: 1, padding: 10, height: 20, marginLeft: 50 }}>
+                        style={styles.textInput}>
                     </TextInput>
                     <TouchableOpacity style={styles.iconTouched} onPress={() => toggleCompleted()}>
                         <Ionicons name={task.completed ? 'ios-checkmark-circle' : 'ios-radio-button-off'} size={32} color="#525bff" />
@@ -91,4 +96,4 @@ const newTasks = ({ navigation }) => {
     )
 }
 
-export default newTasks;
+export default NewTask
